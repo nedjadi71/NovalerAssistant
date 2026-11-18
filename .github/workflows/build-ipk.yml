@@ -1,1 +1,33 @@
 
+name: Build Novaler Assistant IPK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y binutils tar gzip
+
+      - name: Build IPK package
+        run: |
+          chmod +x build.sh
+          bash build.sh
+
+      - name: Upload IPK package
+        uses: actions/upload-artifact@v4
+        with:
+          name: NovalerAssistant-IPK
+          path: dist/*.ipk
+
